@@ -20,7 +20,6 @@ describe("SignUp", function () {
         notify_sms_received(sms_json);
         var activities = JSON.parse(localStorage.activities);
 
-        console.log(activities, "-----------activity------------------")
         expect(activities[1].sign_ups.length).toBe(1);
         expect(activities[1].sign_ups[0].name).toBe("仝键");
     });
@@ -29,7 +28,7 @@ describe("SignUp", function () {
         var sms_json = build_sms_json("BM仝键", "13600000000");
         localStorage.is_signing_up = "true";
         notify_sms_received(sms_json);
-        notify_sms_received(sms_json);
+
         var activities = JSON.parse(localStorage.activities);
         expect(activities[1].sign_ups.length).toBe(1);
         expect(activities[1].sign_ups[0].name).toBe("仝键");

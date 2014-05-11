@@ -3,7 +3,7 @@ function SignUp(name, phone) {
     this.phone = phone
 }
 SignUp.process_sign_up_sms = function (sms_json) {
-    if (SignUp.was_signed_up(sms_json) && !SignUp.is_not_sign_up()) {
+    if (!SignUp.was_signed_up(sms_json) && !SignUp.is_not_sign_up()) {
         SignUp.save_sign_up_message(sms_json)
     }
 }
@@ -16,9 +16,9 @@ SignUp.get_sms = function (sms_json) {
 }
 
 SignUp.was_signed_up = function (sms_json) {
-    return _.find(Activity.get_activities().sign_ups, function (sign_up) {
-        sign_up.phone == SignUp.get_sms(sms_json).phone
-    }) == undefined
+    return _.find(Activity.get_activities(), function (activity) {
+        activity.name == localStorage.current_activity && activity.sign_ups.phone == SignUp.get_sms(sms_json).phone
+    })
 }
 
 SignUp.is_not_sign_up = function () {

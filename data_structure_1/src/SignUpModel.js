@@ -3,25 +3,38 @@ function SignUp(name, phone) {
     this.phone = phone
 }
 SignUp.process_sign_up_sms = function (sms_json) {
-    var activities=localStorage.activities
-    var current_activity=localStorage.current_activity
-    var sign_ups=[]
-    var sign_up=SignUp.sms(sms_json)
-    var is_signing_up=SignUp.is_signing_up(sign_ups,sign_up)
-    if(is_signing_up){
-        sign_ups.push(sign_up)
+    if (SignUp.was_signed_up(sms_json) && !SignUp.is_not_sign_up()) {
+        SignUp.save_sign_up_message(sms_json)
     }
-    localStorage.setItem(activities,JSON.stringify("activities"))
-
 }
 
-SignUp.sms = function (sms_json) {
+SignUp.get_sms = function (sms_json) {
     var name = sms_json.messages[0].message.replace(/\s||\S/g, '').toLocaleLowerCase().replace(/^bm/, '');
     var phone = sms_json.messages[0].phone
     var sign_up = new SignUp(name, phone)
     return sign_up
 }
 
-SignUp.is_signing_up = function (sign_ups, sign_up) {
-    return _.find(sign_ups, function (u) {u.phone == sign_up.phone}) == undefined && localStorage.is_sign_up == 'true'
+SignUp.was_signed_up = function (sms_json) {
+    return _.find(Activity.get_activities().sign_ups, function (sign_up) {
+        sign_up.phone == SignUp.get_sms(sms_json).phone
+    }) == undefined
+}
+
+SignUp.is_not_sign_up = function () {
+    var status = localStorage.is_signing_up
+    if (status == "false" || status == "" || !status) {
+        return true
+    }
+}
+
+SignUp.save_sign_up_message = function (sms_json) {
+    var sign_up = SignUp.get_sms(sms_json)
+    var activities = Activity.get_activities()
+    _.map(activities, function (activity) {
+        if (activity.name == localStorage.current_activity) {
+            activity.sign_ups.push(sign_up)
+        }
+    })
+    localStorage.setItem("activities", JSON.stringify(activities))
 }

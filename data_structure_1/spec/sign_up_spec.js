@@ -20,9 +20,9 @@ describe("SignUp", function () {
         notify_sms_received(sms_json);
         var activities = JSON.parse(localStorage.activities);
 
+        console.log(activities, "-----------activity------------------")
         expect(activities[1].sign_ups.length).toBe(1);
         expect(activities[1].sign_ups[0].name).toBe("仝键");
-
     });
 
     it("should one sms with signing up content sign up failed when user has signed", function () {
@@ -30,7 +30,6 @@ describe("SignUp", function () {
         localStorage.is_signing_up = "true";
         notify_sms_received(sms_json);
         notify_sms_received(sms_json);
-
         var activities = JSON.parse(localStorage.activities);
         expect(activities[1].sign_ups.length).toBe(1);
         expect(activities[1].sign_ups[0].name).toBe("仝键");

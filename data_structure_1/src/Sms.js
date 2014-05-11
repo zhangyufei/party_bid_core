@@ -8,7 +8,7 @@ function notify_sms_received(sms_json) {
                 SignUp.process_sign_up_sms(sms_json)
             },
             JJ: function () {
-                Bidding.process_bidding_sms()
+                Bid.process_bidding_sms()
             }
         }
         if (judge_sms[get_two_string]) {

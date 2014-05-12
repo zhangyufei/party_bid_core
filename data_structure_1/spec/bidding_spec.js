@@ -100,7 +100,7 @@ describe("Bidding", function () {
         notify_sms_received(sms_json);
 
 
-        notify_sms_received(sms_json);
+//        notify_sms_received(sms_json);
 
         var activities = JSON.parse(localStorage.activities);
         expect(activities[1].bids[0].biddings.length).toBe(1);

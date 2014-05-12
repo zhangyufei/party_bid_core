@@ -6,7 +6,7 @@ function Bidding(name, price, phone) {
 
 
 Bidding.deal_with_sms = function (sms_json) {
-    var name = Bidding.user_name(sms_json)
+    var name = Bidding.user_name(sms_json).name
     var price = sms_json.messages[0].message.replace(/\s||\S/g, '').toLocaleLowerCase().replace(/^jj/, '');
     var phone = sms_json.messages[0].phone
     var bid = new Bidding(name, price, phone)
@@ -14,7 +14,7 @@ Bidding.deal_with_sms = function (sms_json) {
 }
 
 Bidding.process_bidding_sms = function (sms_json) {
-    if (Bidding.user_name(sms_json)&&!Bidding.repeat_bid(sms_json)) {
+    if (Bidding.user_name(sms_json) && !Bidding.repeat_bid(sms_json) && localStorage.is_bidding == "true") {
         Bidding.save_bid_sms(sms_json)
     }
 }
@@ -23,10 +23,9 @@ Bidding.user_name = function (sms_json) {
     var activities = JSON.parse(localStorage.activities)
     var phone = sms_json.messages[0].phone
     var sign_ups = Bidding.get_current_active_messages(activities).sign_ups
-    var user_name = _.find(sign_ups, function (sign_up) {
+    return  _.find(sign_ups, function (sign_up) {
         return sign_up.phone == phone
     })
-    return user_name.name
 }
 
 Bidding.save_bid_sms = function (sms_json) {

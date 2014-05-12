@@ -39,5 +39,13 @@ SignUp.save_sign_up_message = function (sms_json) {
     localStorage.setItem("activities", JSON.stringify(activities))
 }
 
+SignUp.render_sign_ups = function (act) {
+    var activities = JSON.parse(localStorage.activities)
+    var acts = _.find(activities, function (avtivity) {
+        return avtivity.name == act
+    })
+    return acts.sign_ups
+}
+
 
 

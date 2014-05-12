@@ -17,3 +17,4 @@ Activity.prototype.active = function () {
 Activity.get_activities = function () {
     return JSON.parse(localStorage.activities)
 }
+

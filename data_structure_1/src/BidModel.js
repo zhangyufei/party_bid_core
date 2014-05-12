@@ -2,10 +2,6 @@ function Bid() {
 
 }
 
-Bid.process_bidding_sms = function () {
-
-}
-
 Bid.create_new_bid = function () {
     var activities = Activity.get_activities()
     _.map(activities, function (activity) {
@@ -16,3 +12,5 @@ Bid.create_new_bid = function () {
     })
     localStorage.setItem("activities", JSON.stringify(activities))
 }
+
+

@@ -38,3 +38,6 @@ SignUp.save_sign_up_message = function (sms_json) {
     })
     localStorage.setItem("activities", JSON.stringify(activities))
 }
+
+
+

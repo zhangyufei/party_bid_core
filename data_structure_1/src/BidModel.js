@@ -14,3 +14,5 @@ Bid.create_new_bid = function () {
 }
 
 
+
+

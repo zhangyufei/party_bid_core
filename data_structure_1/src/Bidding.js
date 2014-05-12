@@ -14,7 +14,7 @@ Bidding.deal_with_sms = function (sms_json) {
 }
 
 Bidding.process_bidding_sms = function (sms_json) {
-    if (Bidding.user_name(sms_json)) {
+    if (Bidding.user_name(sms_json)&&!Bidding.repeat_bid(sms_json)) {
         Bidding.save_bid_sms(sms_json)
     }
 }
@@ -45,4 +45,16 @@ Bidding.get_current_active_messages = function (activities) {
     return _.find(activities, function (activity) {
         return activity['name'] == localStorage.current_activity;
     });
+}
+
+Bidding.repeat_bid = function (sms_json) {
+    var activities = JSON.parse(localStorage.activities)
+    var bids = Bidding.get_current_active_messages(activities).bids
+    var bid = _.find(bids, function (bid) {
+        return bid.name == localStorage.current_bid
+    })
+    var biddings = bid.biddings
+    return _.find(biddings, function (bidding) {
+        return bidding.phone == sms_json.messages[0].phone
+    })
 }

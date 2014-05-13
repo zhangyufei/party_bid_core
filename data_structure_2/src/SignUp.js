@@ -19,7 +19,9 @@ SignUp.save_sign_up_message = function (sms_json) {
 }
 
 SignUp.process_sign_up_sms = function (sms_json) {
-    if (SignUp.is_sign_up() && !SignUp.was_signed_up(sms_json)) {
+    var signing_up = SignUp.is_sign_up()
+    var signed_up = SignUp.was_signed_up(sms_json)
+    if (!signing_up && !signed_up) {
         SignUp.save_sign_up_message(sms_json)
     }
 }
@@ -38,5 +40,8 @@ SignUp.was_signed_up = function (sms_json) {
 }
 
 SignUp.is_sign_up = function () {
-    return localStorage.is_signing_up == "true"
+    var status = localStorage.is_signing_up
+    if (status == '' || status == "false" || !status) {
+        return true
+    }
 }

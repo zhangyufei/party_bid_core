@@ -16,3 +16,8 @@ Activity.prototype.create = function () {
     localStorage.activity_ids = JSON.stringify(activity_ids)
     localStorage.activity_id_generator = activity_id + 1
 }
+
+Activity.get_activities=function(){
+    return JSON.parse(localStorage.activities)
+}
+

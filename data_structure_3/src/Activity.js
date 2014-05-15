@@ -5,8 +5,8 @@ function Activity(activity_name) {
 
 Activity.prototype.create = function () {
     var activities = JSON.parse(localStorage.activities);
-    console.log(this.id)
     activities.unshift(this);
     localStorage.setItem("activities", JSON.stringify(activities));
     localStorage.current_activity = this.id;
+    localStorage.activity_id_generator = parseInt(this.id) + 1;
 }

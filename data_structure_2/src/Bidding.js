@@ -19,46 +19,78 @@ Bidding.process_bidding_sms = function (sms_json) {
     var bid_not_on_bidding = Bidding.is_not_on_bidding();
     var user_have_bid = Bidding.have_bid(activities, current_activity_id, current_bid_id, sms_json)
     if (user_not_sign_up && !bid_not_on_bidding && !user_have_bid) {
-        Bidding.save_bid_sms(activities, current_activity_id, current_bid_id, sms_json)
+        Bidding.save_bid_sms(current_activity_id, current_bid_id, sms_json);
     }
 }
 
 Bidding.did_not_sign_up = function (activities, current_activity_id, sms_json) {
-    var sign_ups = activities[current_activity_id].sign_ups
-    var phone=sms_json.messages[0].phone
+    var sign_ups = activities[current_activity_id].sign_ups;
+    var phone = sms_json.messages[0].phone;
     return  _.find(sign_ups, function (sign_up) {
-        return sign_up.phone == phone
-    })
+        return sign_up.phone == phone;
+    });
 }
 
 Bidding.is_not_on_bidding = function () {
     var status = localStorage.is_bidding;
     if (status == "false" || status == "" || !status) {
-        return true
+        return true;
     }
+    ;
 }
 
 Bidding.have_bid = function (activities, current_activity_id, current_bid_id, sms_json) {
     var bid_phones = activities[current_activity_id].biddings[current_bid_id];
     return _.find(bid_phones, function (bid_phone) {
         return bid_phone['phone'] == sms_json.messages[0].phone;
-    })
-
+    });
 }
 
-Bidding.save_bid_sms = function (activities, current_activity_id, current_bid_id, sms_json) {
-    var bidding = Bidding.get_user_bid_message(sms_json);
+Bidding.save_bid_sms = function (current_activity_id, current_bid_id, sms_json) {
+    var activities = JSON.parse(localStorage.activities)
+    var bidding = Bidding.get_user_bid_message(activities, current_activity_id, sms_json);
     activities[current_activity_id].biddings[current_bid_id].unshift(bidding);
     localStorage.setItem("activities", JSON.stringify(activities));
+    console
 }
 
-Bidding.get_user_bid_message = function (sms_json) {
+Bidding.get_user_bid_message = function (activities, current_activity_id, sms_json) {
     var phone = sms_json.messages[0].phone;
     var price = sms_json.messages[0].message.replace(/\s||\S/g, "").replace(/^jj/ig, "");
     var bidding = new Bidding(phone, price);
     return bidding;
 }
 
+Bidding.min_not_repeat = function (current_activity_id, current_bid) {
+    var biddings = JSON.parse(localStorage.activities)[current_activity_id].biddings[current_bid]
+    return  _.chain(biddings)
+        .sortBy(function (bidding) {
+            return parseInt(bidding.price)
+        })
+        .groupBy(function (bidding) {
+            return bidding.price
+        })
+        .find(function (bidding) {
+            return bidding.length == 1
+        })
+        .value();
+}
+
+
+function transform_bids_to_view_model(activity) {
+    var activities = JSON.parse(localStorage.activities);
+    return activities[activity].bids;
+}
+
+function transform_biddings_to_view_model(current_activity_id, current_bid) {
+    var activities = JSON.parse(localStorage.activities);
+    var min_not_repeat = Bidding.min_not_repeat(current_activity_id, current_bid);
+    var sign_up_applicant = _.find(activities[current_activity_id].sign_ups, function (c) {
+        return c.phone == min_not_repeat[0].phone;
+    });
+    min_not_repeat[0]['name'] = sign_up_applicant.name;
+    return min_not_repeat;
+}
 
 
 

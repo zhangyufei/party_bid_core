@@ -45,3 +45,11 @@ SignUp.is_not_sign_up = function () {
         return true
     }
 }
+
+SignUp.render_sign_ups = function (activity) {
+    var activities = JSON.parse(localStorage.activities);
+    var current_activity_id = localStorage.current_activity;
+    if (activities[current_activity_id].name == activity) {
+        return activities[current_activity_id].sign_ups;
+    }
+}

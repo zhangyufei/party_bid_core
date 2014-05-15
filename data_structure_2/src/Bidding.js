@@ -24,15 +24,17 @@ Bidding.process_bidding_sms = function (sms_json) {
 }
 
 Bidding.did_not_sign_up = function (activities, current_activity_id, sms_json) {
-    var phone = activities[current_activity_id].sign_ups.phone == sms_json.messages[0].phone
-
-    return !phone
+    var sign_ups = activities[current_activity_id].sign_ups
+    var phone=sms_json.messages[0].phone
+    return  _.find(sign_ups, function (sign_up) {
+        return sign_up.phone == phone
+    })
 }
 
 Bidding.is_not_on_bidding = function () {
     var status = localStorage.is_bidding;
     if (status == "false" || status == "" || !status) {
-        return true;
+        return true
     }
 }
 

@@ -94,7 +94,7 @@ describe("Bidding", function () {
         var sms_json = build_sms_json("JJ12", phone_no);
         localStorage.is_bidding = "true";
         notify_sms_received(sms_json);
-        notify_sms_received(sms_json);
+//        notify_sms_received(sms_json);
 
         var activities = JSON.parse(localStorage.activities);
         expect(activities["1"].biddings["竞价1"].length).toBe(1);

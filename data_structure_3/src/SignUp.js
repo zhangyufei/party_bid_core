@@ -1,6 +1,6 @@
 function SignUp(name, phone, activity_id) {
     this.name = name;
-    this, phone = phone;
+    this. phone = phone;
     this.activity_id = activity_id;
 }
 

@@ -20,6 +20,5 @@ Bid.render_bids = function (activity_id) {
         if (bid.activity_id == activity_id) {
             return bid.name;
         }
-        ;
     });
 }

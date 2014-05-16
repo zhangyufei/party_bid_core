@@ -6,7 +6,7 @@ function Bidding(phone, price) {
 Bidding.create_new_bid = function (current_activity) {
     var activities = JSON.parse(localStorage.activities);
     var bid_name = "竞价" + (parseInt(activities[current_activity].bids.length) + 1);
-    activities[current_activity].bids.unshift(bid_name)
+    activities[current_activity].bids.unshift(bid_name);
     activities[current_activity].biddings[bid_name] = [ ];
     localStorage.setItem("activities", JSON.stringify(activities));
 }
@@ -36,7 +36,6 @@ Bidding.is_not_on_bidding = function () {
     if (status == "false" || status == "" || !status) {
         return true;
     }
-    ;
 }
 
 Bidding.have_bid = function (activities, current_activity_id, current_bid_id, sms_json) {
@@ -47,22 +46,23 @@ Bidding.have_bid = function (activities, current_activity_id, current_bid_id, sm
 }
 
 Bidding.save_bid_sms = function (current_activity_id, current_bid_id, sms_json) {
-    var activities = JSON.parse(localStorage.activities)
+    var activities = JSON.parse(localStorage.activities);
     var bidding = Bidding.get_user_bid_message(activities, current_activity_id, sms_json);
     activities[current_activity_id].biddings[current_bid_id].unshift(bidding);
     localStorage.setItem("activities", JSON.stringify(activities));
-    console
 }
 
 Bidding.get_user_bid_message = function (activities, current_activity_id, sms_json) {
     var phone = sms_json.messages[0].phone;
     var price = sms_json.messages[0].message.replace(/\s||\S/g, "").replace(/^jj/ig, "");
-    var bidding = new Bidding(phone, price);
+    if(!isNaN(price)){
+        var bidding = new Bidding(phone, price);
+    }
     return bidding;
 }
 
 Bidding.min_not_repeat = function (current_activity_id, current_bid) {
-    var biddings = JSON.parse(localStorage.activities)[current_activity_id].biddings[current_bid]
+    var biddings = JSON.parse(localStorage.activities)[current_activity_id].biddings[current_bid];
     return  _.chain(biddings)
         .sortBy(function (bidding) {
             return parseInt(bidding.price)

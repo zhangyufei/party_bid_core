@@ -1,6 +1,6 @@
 function Activity(activity_name) {
     this.name = activity_name;
-    this.id = JSON.stringify(JSON.parse(localStorage.activities).length)
+    this.id = JSON.stringify(JSON.parse(localStorage.activities).length);
 }
 
 Activity.prototype.create = function () {

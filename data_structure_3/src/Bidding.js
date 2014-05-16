@@ -16,7 +16,6 @@ Bidding.have_bid = function (sms_json, current_activity_id, current_bid_id) {
         if (bid.activity_id == current_activity_id && bid.name == current_bid_id) {
             return bid.biddings;
         }
-        ;
     });
     var biddings = bid.biddings
     return _.find(biddings, function (bidding) {
@@ -40,7 +39,6 @@ Bidding.save_bid_sms = function (sms_json, current_activity_id, current_bid_id) 
             var bidding = new Bidding(price, phone);
             return  bids[0].biddings.unshift(bidding);
         }
-        ;
     });
     localStorage.bids = JSON.stringify(bids);
 }
@@ -61,9 +59,9 @@ Bidding.render_biddings = function (activity_id, bid_id) {
     var sign_ups = JSON.parse(localStorage.sign_ups);
     var user_name = _.find(sign_ups, function (sign_up) {
         if (sign_up.activity_id == activity_id && sign_up.phone == minnum[0].phone) {
-            return  sign_up.name
+            return  sign_up.name;
         }
-    })
+    });
     minnum[0]["name"] = user_name.name;
     return minnum;
 }
@@ -74,7 +72,6 @@ Bidding.get_minnum = function (activity_id, bid_id) {
         if (bid.activity_id == activity_id && bid.name == bid_id) {
             return  bid.biddings;
         }
-        ;
     });
     var biddings = bid.biddings;
     return  _.chain(biddings)

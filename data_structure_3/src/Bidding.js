@@ -36,9 +36,9 @@ Bidding.save_bid_sms = function (sms_json, current_activity_id, current_bid_id) 
     var price = sms_json.messages[0].message.replace(/\s||\S/g, "").replace(/^jj/ig, "");
     var phone = sms_json.messages[0].phone;
     _.find(bids, function (bid) {
-        if (bid.activity_id == current_activity_id && bid.name == current_bid_id && !isNaN(phone)) {
+        if (bids[0].activity_id == current_activity_id && bids[0].name == current_bid_id && !isNaN(phone)) {
             var bidding = new Bidding(price, phone);
-            return  bid.biddings.unshift(bidding);
+            return  bids[0].biddings.unshift(bidding);
         }
         ;
     });
@@ -56,3 +56,36 @@ Bidding.process_bidding_sms = function (sms_json) {
     }
 }
 
+Bidding.render_biddings = function (activity_id, bid_id) {
+    var minnum = Bidding.get_minnum(activity_id, bid_id);
+    var sign_ups = JSON.parse(localStorage.sign_ups);
+    var user_name = _.find(sign_ups, function (sign_up) {
+        if (sign_up.activity_id == activity_id && sign_up.phone == minnum[0].phone) {
+            return  sign_up.name
+        }
+    })
+    minnum[0]["name"] = user_name.name;
+    return minnum;
+}
+
+Bidding.get_minnum = function (activity_id, bid_id) {
+    var bids = JSON.parse(localStorage.bids);
+    var bid = _.find(bids, function (bid) {
+        if (bid.activity_id == activity_id && bid.name == bid_id) {
+            return  bid.biddings;
+        }
+        ;
+    });
+    var biddings = bid.biddings;
+    return  _.chain(biddings)
+        .sortBy(function (bidding) {
+            return parseInt(bidding.price)
+        })
+        .groupBy(function (bidding) {
+            return bidding.price
+        })
+        .find(function (bidding) {
+            return bidding.length == 1
+        })
+        .value();
+}

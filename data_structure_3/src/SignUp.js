@@ -35,3 +35,10 @@ SignUp.get_sms = function (sms_json, current_activity_id) {
     var sign_up = new SignUp(name, phone, activity_id)
     return sign_up
 }
+
+SignUp.render_sign_ups = function (activity_id) {
+    var sign_ups = JSON.parse(localStorage.sign_ups);
+    return _.filter(sign_ups, function (sign_up) {
+        return sign_up.activity_id == activity_id;
+    });
+}

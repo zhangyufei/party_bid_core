@@ -1,15 +1,13 @@
-function Bid(name, activity_id, biddings) {
+function Bid(name, activity_id) {
     this.name = name;
     this.activity_id = activity_id;
-    this.biddings = biddings;
+    this.biddings = [];
 }
 
 Bid.create_new_bid = function (activity_id) {
     var bids = JSON.parse(localStorage.bids);
     var name = "竞价" + (parseInt(bids.length) + 1);
-    var activity_id = activity_id;
-    var biddings = [];
-    var bid = new Bid(name, activity_id, biddings)
+    var bid = new Bid(name, activity_id)
     bids.unshift(bid);
     localStorage.bids = JSON.stringify(bids);
 }

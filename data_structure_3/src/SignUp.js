@@ -1,25 +1,18 @@
-function SignUp(name, phone, activity_id) {
+function SignUp(name, phone, current_activity_id) {
     this.name = name;
-    this. phone = phone;
-    this.activity_id = activity_id;
+    this.phone = phone;
+    this.activity_id = current_activity_id;
 }
 
 SignUp.process_sign_up_sms = function (sms_json) {
     var sign_ups = JSON.parse(localStorage.sign_ups);
     var current_activity_id = localStorage.current_activity;
-    var sms = SignUp.get_sms(sms_json, current_activity_id)
-    var sign_up_is_not_start = SignUp.is_not_sign_up();
+    var sms = SignUp.get_sms(sms_json, current_activity_id);
+    var sign_up_is_start = localStorage.is_signing_up;
     var user_have_signed_up = SignUp.have_signed_up(current_activity_id, sms_json);
-    if (!sign_up_is_not_start && !user_have_signed_up) {
+    if (sign_up_is_start == "true" && !user_have_signed_up) {
         sign_ups.unshift(sms);
         localStorage.sign_ups = JSON.stringify(sign_ups);
-    }
-}
-
-SignUp.is_not_sign_up = function () {
-    var status = localStorage.is_signing_up;
-    if (status == "false" || status == "" || !status) {
-        return true;
     }
 }
 
@@ -30,10 +23,9 @@ SignUp.have_signed_up = function (current_activity_id, sms_json) {
 
 SignUp.get_sms = function (sms_json, current_activity_id) {
     var name = sms_json.messages[0].message.replace(/\s||\S/g, '').toLocaleLowerCase().replace(/^bm/, '');
-    var phone = sms_json.messages[0].phone
-    var activity_id = current_activity_id
-    var sign_up = new SignUp(name, phone, activity_id)
-    return sign_up
+    var phone = sms_json.messages[0].phone;
+    var sign_up = new SignUp(name, phone, current_activity_id);
+    return sign_up;
 }
 
 SignUp.render_sign_ups = function (activity_id) {

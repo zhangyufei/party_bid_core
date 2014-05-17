@@ -14,9 +14,14 @@ Bidding.deal_with_sms = function (sms_json) {
 }
 
 Bidding.process_bidding_sms = function (sms_json) {
-    if (Bidding.user_name(sms_json) && !Bidding.repeat_bid(sms_json) && localStorage.is_bidding == "true") {
+    var bid_can_save = Bidding.is_can_save(sms_json);
+    if (bid_can_save) {
         Bidding.save_bid_sms(sms_json);
     }
+}
+
+Bidding.is_can_save = function (sms_json) {
+    return Bidding.user_name(sms_json) && !Bidding.repeat_bid(sms_json) && localStorage.is_bidding == "true";
 }
 
 Bidding.user_name = function (sms_json) {
@@ -33,11 +38,9 @@ Bidding.save_bid_sms = function (sms_json) {
     var activities = JSON.parse(localStorage.activities);
     var act = Bidding.get_current_active_messages(activities);
     _.map(act.bids, function (bid) {
-        if (bid.name == localStorage.current_bid) {
-            bid.biddings.unshift(bid_sms);
-        }
-    })
-    localStorage.setItem("activities", JSON.stringify(activities))
+        bid.name == localStorage.current_bid ? bid.biddings.unshift(bid_sms) : '';
+    });
+    localStorage.setItem("activities", JSON.stringify(activities));
 }
 
 Bidding.get_current_active_messages = function (activities) {
@@ -55,5 +58,5 @@ Bidding.repeat_bid = function (sms_json) {
     var biddings = bid.biddings;
     return _.find(biddings, function (bidding) {
         return bidding.phone == sms_json.messages[0].phone;
-    })
+    });
 }
